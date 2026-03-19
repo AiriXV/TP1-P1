@@ -4,7 +4,7 @@ public class Central {
     private boolean juegoTerminado;
 
     //Constructor
-    public void central(){
+    public Central(){
         this.palabraSecreta = seleccionarPalabraAleatoria();
         this.intentosUsados = 0;
         this.juegoTerminado = false;
@@ -57,7 +57,7 @@ public class Central {
     }
     
     // Lógica de victoria o derrota
-        if (intento.equals(palabraSecreta)) {
+        if (intento.equalsIgnoreCase(palabraSecreta)) {
             juegoTerminado = true;
             return "¡Felicidades! Has adivinado la palabra secreta.";
         }
