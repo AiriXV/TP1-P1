@@ -4,7 +4,7 @@ public class Central {
     private boolean juegoTerminado;
 
     //Constructor
-    public Central(String palabraSecreta, int intentos) {
+    public void central(){
         this.palabraSecreta = seleccionarPalabraAleatoria();
         this.intentosUsados = 0;
         this.juegoTerminado = false;
@@ -69,5 +69,20 @@ public class Central {
 
         // Unimos el array de resultados en un solo String para devolver
         return String.join(" ", resultadoColores);
+    }
+
+    // Método para seleccionar una palabra aleatoria de una lista predefinida
+    private String seleccionarPalabraAleatoria() {
+        String[] diccionario = { "arbol", "casas", "zorro", "piano", "llave", "libro", "mouse", "tecla", "gatos", "juego"};
+    
+        // Generamos un índice al azar entre 0 y el largo de la lista
+        int indiceAleatorio = (int) (Math.random() * diccionario.length);
+    
+        return diccionario[indiceAleatorio];
+    }
+
+    // Getter para saber si el juego terminó (informa a probarJuego)
+    public boolean isJuegoTerminado() {
+    return this.juegoTerminado;
     }
 }
