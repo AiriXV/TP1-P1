@@ -1,3 +1,5 @@
+package logica;
+ 
 public class Central {
     private String palabraSecreta;
     private int intentosUsados;
@@ -6,6 +8,7 @@ public class Central {
     //Constructor
     public Central(){
         this.palabraSecreta = seleccionarPalabraAleatoria();
+       
         this.intentosUsados = 0;
         this.juegoTerminado = false;
     }
@@ -69,6 +72,7 @@ public class Central {
 
         // Unimos el array de resultados en un solo String para devolver
         return String.join(" ", resultadoColores);
+    
     }
 
     // Método para seleccionar una palabra aleatoria de una lista predefinida
@@ -85,4 +89,11 @@ public class Central {
     public boolean isJuegoTerminado() {
     return this.juegoTerminado;
     }
+
+	
+
+	public String getPalabraSecreta() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
