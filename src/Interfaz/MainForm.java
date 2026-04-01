@@ -503,24 +503,34 @@ private JPanel panel_3;
 
 	    // Convertir a mayúscula y dejar solo esa letra
       JTextField campo = (JTextField) comp;
-
+      
+      
 	    campo.setText(String.valueOf(Character.toUpperCase(a)));
 	    
-	
+	   
 	   }
 	private void recorrerFila(Component com) {
 		JPanel m= (JPanel)com;
 		for (Component comp : m.getComponents()) {
-			
 	    	comp.addKeyListener(new KeyAdapter() {
 				public void keyTyped(KeyEvent e) {
-					char letra=e.getKeyChar();
-					e.consume(); //limpia
 					
+					if (((JTextField) comp).getText().length() > 0) {
+			            e.consume(); // detectar un solo chat
+			            return;
+			        }else {
+					char letra=e.getKeyChar();
+					
+					 //limpia
+					e.consume();
 					mostrarUnicoCaracter(comp,letra);
 					inPalabra.append(letra);
 					
+				
+			     
+					
 					if(contador5>0) {
+						
 						SwingUtilities.invokeLater(() -> comp.transferFocus());
 						contador5--;
 					}
@@ -528,13 +538,18 @@ private JPanel panel_3;
 							String palabra= inPalabra.toString();
 							System.out.println(juego.recibirIntento(palabra)); 
 							SwingUtilities.invokeLater(() -> comp.transferFocus());
+							inPalabra.setLength(0);
+							contador5=4;	
 						
 								}
 								
-								
-							}
-								
-						});
-					
-				}contador5=4;}
+						
+							
+			        }						
+}
+				
+				});
+	   ;
+				}
+				}
 }
