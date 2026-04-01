@@ -25,6 +25,8 @@ import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import javax.swing.Box;
 import java.beans.PropertyChangeListener;
+import java.util.HashMap;
+import java.util.Map;
 import java.beans.PropertyChangeEvent;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
@@ -83,8 +85,9 @@ public class MainForm {
 	private JPanel panel_2;
 	private Central juego = new Central();
 	private StringBuilder inPalabra; 
-private int contador5=4;
-private JPanel panel_3;
+	private int contador5=4;
+	private JPanel panel_3;
+	private Map<String, JButton> teclado = new HashMap<>();
 
 	
 
@@ -114,44 +117,7 @@ private JPanel panel_3;
 		initialize();
 	
 		inPalabra=new StringBuilder();
-	
-//		JTextField[] campos = new JTextField[]{txt1, txt2, txt3, txt4, txt5};
-//		
-//
-//		for (int i = 0; i < campos.length; i++) {
-//		    final int indice = i;
-//		    
-//		    campos[i].addKeyListener(new KeyAdapter() {
-//		        public void keyTyped(KeyEvent e) {
-//		            char letra = e.getKeyChar();
-//		         
-//		            
-//		                                                                                          // Solo permitir letras del alfabeto
-//		            if (!Character.isLetter(letra)) {
-//		                e.consume(); // cancela cualquier otro carácter (números, símbolos)
-//		                return;
-//		            }
-//		            
-//		           																					 // Limpiar el campo antes de escribir (para que solo haya 1 letra)
-//		            campos[indice].setText("");
-//		            
-//		           																					 // Convertir a mayúscula
-//		            e.setKeyChar(Character.toUpperCase(letra));
-//		            inPalabra.append(letra);
-//		            System.out.println(inPalabra);
-//		            
-//		        																					    // Si no es el último campo, saltar al siguiente
-//		            if (indice < campos.length - 1) {
-//		                SwingUtilities.invokeLater(() -> campos[indice + 1].requestFocus());
-//		            }
-//		        }
-//		   });
-//		} 
-		
-		
-		
-     
-            
+	            
 	         
            
 
@@ -445,10 +411,10 @@ private JPanel panel_3;
 		lblNewLabel.setBounds(288, 108, 137, 14);
 		frame.getContentPane().add(lblNewLabel);
 		//TECLADO
-		JPanel teclado = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		teclado.setBackground(new Color(255, 128, 192));
-		teclado.setBounds(268, 591, 510, 139);
-		frame.getContentPane().add(teclado);
+		JPanel tecladoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		tecladoPanel.setBackground(new Color(255, 128, 192));
+		tecladoPanel.setBounds(268, 591, 510, 139);
+		frame.getContentPane().add(tecladoPanel);
 	
 		
 		
@@ -466,16 +432,16 @@ private JPanel panel_3;
 		String abecedario="qwertyuiopasdfghjklñzxcvbnm";
 		
 		for (int i=0; i<abecedario.length();i++) {
-
-			JButton aux  = new JButton(String.valueOf(abecedario.charAt(i)));
-			aux.setBorder(new LineBorder(Color.WHITE));
-			aux.setFont(new Font("Times New Roman", Font.PLAIN, 35));
-			aux.setForeground(Color.WHITE);
-			aux.setBackground(Color.PINK);
-			aux.setPreferredSize(new Dimension(40, 40));
+			String letra = String.valueOf(abecedario.charAt(i));
+			JButton boton  = new JButton(String.valueOf(letra));
+			boton.setBorder(new LineBorder(Color.WHITE));
+			boton.setFont(new Font("Times New Roman", Font.PLAIN, 35));
+			boton.setForeground(Color.WHITE);
+			boton.setBackground(Color.PINK);
+			boton.setPreferredSize(new Dimension(40, 40));
 		
-			
-			teclado.add(aux);
+			teclado.put(letra,boton);
+			tecladoPanel.add(boton);
 			
 			
 		//aux.addActionListener(new ActionListener() {
@@ -516,7 +482,7 @@ private JPanel panel_3;
 				public void keyTyped(KeyEvent e) {
 					
 					if (((JTextField) comp).getText().length() > 0) {
-			            e.consume(); // detectar un solo chat
+			            e.consume(); // para detectar un solo char
 			            return;
 			        }else {
 					char letra=e.getKeyChar();
@@ -527,8 +493,6 @@ private JPanel panel_3;
 					inPalabra.append(letra);
 					
 				
-			     
-					
 					if(contador5>0) {
 						
 						SwingUtilities.invokeLater(() -> comp.transferFocus());
@@ -536,15 +500,13 @@ private JPanel panel_3;
 					}
 						else {
 							String palabra= inPalabra.toString();
-							System.out.println(juego.recibirIntento(palabra)); 
+					//		System.out.println(juego.recibirIntento(palabra)); 
+							cambiarColoresLetras(juego.recibirIntento(palabra));
 							SwingUtilities.invokeLater(() -> comp.transferFocus());
 							inPalabra.setLength(0);
 							contador5=4;	
 						
-								}
-								
-						
-							
+								}		
 			        }						
 }
 				
@@ -552,4 +514,21 @@ private JPanel panel_3;
 	   ;
 				}
 				}
+
+
+
+	protected void cambiarColoresLetras(Boolean[] colores) {
+	
+		for(int i =0;i<5;i++) {
+			if(colores[i]!=null){
+			if(colores[i]==true){
+				
+				String Let= String.valueOf(inPalabra.charAt(i));
+				teclado.get(Let).setBackground(Color.green);
+			}else{
+				String Let= String.valueOf(inPalabra.charAt(i));
+				teclado.get(Let).setBackground(Color.yellow);
+			}
+		}}
+	}
 }
