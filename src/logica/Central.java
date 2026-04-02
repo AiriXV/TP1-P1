@@ -1,4 +1,9 @@
 package logica;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.io.IOException;
+
 
 public class Central {
 	private String palabraSecreta;
@@ -83,13 +88,29 @@ public class Central {
 
 	// Método para seleccionar una palabra aleatoria de una lista predefinida
 	private String seleccionarPalabraAleatoria() {
-		String[] diccionario = { "arbol", "casas", "zorro", "piano", "llave", "libro", "mouse", "tecla", "gatos",
-				"juego" };
-
+		//-----Listado de palabras solo por si queremos hacer una revisión sin usar el txt
+		//String[] diccionario = { "arbol", "casas", "zorro", "piano", "llave", "libro", "mouse", "tecla", "gatos",
+		//		"juego" };
 		// Generamos un índice al azar entre 0 y el largo de la lista
-		int indiceAleatorio = (int) (Math.random() * diccionario.length);
+		// int indiceAleatorio = (int) (Math.random() * diccionario.length);
+		//return diccionario[indiceAleatorio];
+		
+		//ahora si usando el txt
+		try {
+	        // Busca el archivo y guarda todas las líneas en una lista
+	        List<String> todasLasPalabras = Files.readAllLines(Paths.get("diccionario.txt"));
 
-		return diccionario[indiceAleatorio];
+	        int indiceAleatorio = (int) (Math.random() * todasLasPalabras.size());
+	        
+	        // retorna la palabra elegida, quitando espacios y pasando a mayúsculas
+	        return todasLasPalabras.get(indiceAleatorio).trim().toUpperCase();
+
+	    } catch (IOException e) {
+	        // Si el archivo no existe o no se puede leer, muestra el error en consola
+	        System.out.println("Error al leer el archivo de palabras: " + e.getMessage());
+	        return "JUEGO"; // Palabra de respaldo por defecto para que el programa no se rompa
+	    }
+		
 	}
 
 	// Getter para saber si el juego terminó (informa a probarJuego)
