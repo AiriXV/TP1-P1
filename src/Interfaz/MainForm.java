@@ -455,40 +455,82 @@ public class MainForm {
 	}
 
 	private void recorrerFila(Component com) {
-		JPanel m = (JPanel) com;
-		for (Component comp : m.getComponents()) {
-			comp.addKeyListener(new KeyAdapter() {
-				public void keyTyped(KeyEvent e) {
+	    JPanel m = (JPanel) com;
+	    for (Component comp : m.getComponents()) {
+	        comp.addKeyListener(new KeyAdapter() {
+	            @Override
+	            public void keyPressed(KeyEvent e) {
+	                // borrar
+	                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+	                    JTextField campo = (JTextField) comp;
+	                    if (campo.getText().isEmpty()) {
+	                        comp.transferFocusBackward(); // Si está vacío, vuelve atrás
+	                    } else {
+	                        campo.setText(""); // Si tiene letra, la borra
+	                    }
+	                }
+	                
+	                // confirmar palabra
+	                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+	                    enviarPalabra();
+	                }
+	            }
 
-					if (((JTextField) comp).getText().length() > 0) {
-						e.consume(); // para detectar un solo char
-						return;
-					} else {
-						char letra = e.getKeyChar();
-						// limpia
-						e.consume();
-						mostrarUnicoCaracter(comp, letra);
-						palabraIngresada.append(letra);
+	            @Override
+	            public void keyTyped(KeyEvent e) {
+	                char letra = e.getKeyChar();
+	                JTextField campo = (JTextField) comp;
 
-						if (contador5 > 0) {
-							SwingUtilities.invokeLater(() -> comp.transferFocus()); // mueve el cursor al siguiente
-																					// campo
-							contador5--;
-						} else {
-						    String palabra = palabraIngresada.toString();
-						    Boolean[] resultado = juego.recibirIntento(palabra);
-						    cambiarColorTecla(resultado);
-						    cambiarColorContenedor(resultado);
-						    SwingUtilities.invokeLater(() -> comp.transferFocus());
-						    palabraIngresada.setLength(0);
-						    contador5 = 4;
-						}
-					}
-				}
-			});
-		}
+	                if (!Character.isLetter(letra) || !campo.getText().isEmpty()) {
+	                    e.consume();
+	                    return;
+	                }
+
+	                // evitar que se dupliquen las letras, como "Aa"
+	                e.setKeyChar(Character.toUpperCase(letra));
+
+	                // movemos el foco al siguiente cuadro automáticamente
+	                SwingUtilities.invokeLater(() -> comp.transferFocus());
+	            }
+	        });
+	    }
+	}
+	
+	private void enviarPalabra() {
+	    // armamos la palabra 
+	    StringBuilder sb = new StringBuilder();
+	    JTextField[] filaActualArray = todasLasFilas[filaActual];
+	    
+	    for (JTextField campo : filaActualArray) {
+	        sb.append(campo.getText());
+	    }
+
+	    String palabra = sb.toString();
+
+	    // validamos que la palabra esté completa
+	    if (palabra.length() < 5) {
+	        System.out.println("Palabra incompleta");
+	        return;
+	    }
+
+
+	    Boolean[] resultado = juego.recibirIntento(palabra);
+	    cambiarColorContenedor(resultado);
+
+	    // siguiente intento
+	    if (!juego.isJuegoTerminado()) {
+	        solicitarFocoNuevaFila();
+	    } else {
+	        System.out.println("Fin del juego"); 
+	    }
 	}
 
+	private void solicitarFocoNuevaFila() {
+	    if (filaActual < 6) {
+	        todasLasFilas[filaActual][0].requestFocus();
+	    }
+	}
+	
 	protected void cambiarColorTecla(Boolean[] resultadoFila) {
 		for (int i = 0; i < 5; i++) {
 			String letra = String.valueOf(palabraIngresada.charAt(i));
