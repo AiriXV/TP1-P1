@@ -456,23 +456,25 @@ public class MainForm {
 
 	private void recorrerFila(Component com) {
 	    JPanel m = (JPanel) com;
-	    for (Component comp : m.getComponents()) {
+	    Component[] componentes = m.getComponents(); // Obtenemos los 5 cuadros de la fila
+	    
+	    for (int i = 0; i < componentes.length; i++) {
+	        final int indiceLetra = i; // Guardamos el índice (0 a 4)
+	        Component comp = componentes[i];
+	        
 	        comp.addKeyListener(new KeyAdapter() {
 	            @Override
 	            public void keyPressed(KeyEvent e) {
-	                // borrar
+	                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+	                    enviarPalabra();
+	                }
 	                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 	                    JTextField campo = (JTextField) comp;
 	                    if (campo.getText().isEmpty()) {
-	                        comp.transferFocusBackward(); // Si está vacío, vuelve atrás
+	                        comp.transferFocusBackward();
 	                    } else {
-	                        campo.setText(""); // Si tiene letra, la borra
+	                        campo.setText("");
 	                    }
-	                }
-	                
-	                // confirmar palabra
-	                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-	                    enviarPalabra();
 	                }
 	            }
 
@@ -486,17 +488,20 @@ public class MainForm {
 	                    return;
 	                }
 
-	                // evitar que se dupliquen las letras, como "Aa"
 	                e.setKeyChar(Character.toUpperCase(letra));
 
-	                // movemos el foco al siguiente cuadro automáticamente
-	                SwingUtilities.invokeLater(() -> comp.transferFocus());
+	                // SOLO movemos el foco si NO es la última letra (índice 4)
+	                if (indiceLetra < 4) {
+	                    SwingUtilities.invokeLater(() -> comp.transferFocus());
+	                }
 	            }
 	        });
 	    }
 	}
 	
 	private void enviarPalabra() {
+	    if (juego.isJuegoTerminado() || filaActual > 5) return;
+
 	    StringBuilder sb = new StringBuilder();
 	    JTextField[] filaActualArray = todasLasFilas[filaActual];
 	    
@@ -507,19 +512,25 @@ public class MainForm {
 	    String palabra = sb.toString();
 
 	    if (palabra.length() < 5) {
-	        System.out.println("Palabra incompleta. La palabra debe tener 5 letras");
+	        javax.swing.JOptionPane.showMessageDialog(frame, "La palabra debe tener 5 letras.");
 	        return;
 	    }
 
 	    Boolean[] resultado = juego.recibirIntento(palabra);
-
 	    cambiarColorTecla(resultado, palabra); 
 	    cambiarColorContenedor(resultado);     
 
-	    if (!juego.isJuegoTerminado()) {
-	        solicitarFocoNuevaFila();
+	    // Verificamos victoria o derrota
+	    if (juego.isJuegoTerminado()) {
+	        String mensaje;
+	        if (palabra.equalsIgnoreCase(juego.getPalabraSecreta())) {
+	            mensaje = "¡GANASTE! " + palabra + " era la palabra.";
+	        } else {
+	            mensaje = "PERDISTE. La palabra era: " + juego.getPalabraSecreta();
+	        }
+	        javax.swing.JOptionPane.showMessageDialog(frame, mensaje);
 	    } else {
-	        System.out.println("Fin del juego. Palabra: " + juego.getPalabraSecreta()); 
+	        solicitarFocoNuevaFila();
 	    }
 	}
 
