@@ -497,7 +497,6 @@ public class MainForm {
 	}
 	
 	private void enviarPalabra() {
-	    // armamos la palabra 
 	    StringBuilder sb = new StringBuilder();
 	    JTextField[] filaActualArray = todasLasFilas[filaActual];
 	    
@@ -507,21 +506,20 @@ public class MainForm {
 
 	    String palabra = sb.toString();
 
-	    // validamos que la palabra esté completa
 	    if (palabra.length() < 5) {
-	        System.out.println("Palabra incompleta");
+	        System.out.println("Palabra incompleta. La palabra debe tener 5 letras");
 	        return;
 	    }
 
-
 	    Boolean[] resultado = juego.recibirIntento(palabra);
-	    cambiarColorContenedor(resultado);
 
-	    // siguiente intento
+	    cambiarColorTecla(resultado, palabra); 
+	    cambiarColorContenedor(resultado);     
+
 	    if (!juego.isJuegoTerminado()) {
 	        solicitarFocoNuevaFila();
 	    } else {
-	        System.out.println("Fin del juego"); 
+	        System.out.println("Fin del juego. Palabra: " + juego.getPalabraSecreta()); 
 	    }
 	}
 
@@ -531,22 +529,30 @@ public class MainForm {
 	    }
 	}
 	
-	protected void cambiarColorTecla(Boolean[] resultadoFila) {
-		for (int i = 0; i < 5; i++) {
-			String letra = String.valueOf(palabraIngresada.charAt(i));
-			if (resultadoFila[i] != null) {
-				if (resultadoFila[i] == true) {
-					teclado.get(letra).setBackground(Color.green);
-				}
-				else {
-					teclado.get(letra).setBackground(Color.decode("#C9B458"));
-				}
-			} else {
-				teclado.get(letra).setBackground(Color.gray);
-			}
-		}
-	}
 
+	protected void cambiarColorTecla(Boolean[] resultadoFila, String palabraEnviada) {
+	    palabraEnviada = palabraEnviada.toLowerCase(); 
+
+	    for (int i = 0; i < 5; i++) {
+	        String letra = String.valueOf(palabraEnviada.charAt(i));
+	        JButton botonTecla = teclado.get(letra);
+
+	        if (botonTecla != null) {
+	            if (resultadoFila[i] != null) {
+	                if (resultadoFila[i] == true) {
+	                    botonTecla.setBackground(Color.green);
+	                } else {
+	                    botonTecla.setBackground(Color.yellow);
+	                }
+	            } else {
+	            	if (botonTecla.getBackground() != Color.green && 
+	                        botonTecla.getBackground() != Color.yellow) {
+	                        botonTecla.setBackground(Color.gray);
+	                    }
+	            }
+	        }
+	    }
+	}
 	protected void cambiarColorContenedor(Boolean[] resultadoFila) {
 	    JTextField[] filaActualArray = todasLasFilas[filaActual];
 
