@@ -489,11 +489,26 @@ public class MainForm {
 						        
 						        javax.swing.JOptionPane.showMessageDialog(frame,
 						            "Palabra no válida. Intentá con otra.", 
-						            "Error", javax.swing.JOptionPane.WARNING_MESSAGE); //Mensaje de error
+						            "Error", javax.swing.JOptionPane.WARNING_MESSAGE); //Mensaje de error.
 						    } else {
 						        Boolean[] resultado = juego.recibirIntento(palabra);
 						        cambiarColorTecla(resultado);
 						        cambiarColorContenedor(resultado);
+						        
+						        //----Nos muestra un aviso que indica si perdiste o ganaste con los 6 intentos
+						        if (palabra.equalsIgnoreCase(juego.getPalabraSecreta())) {
+						        	
+						        	//Muestra una ventana con un mensaje
+						            javax.swing.JOptionPane.showMessageDialog(frame,
+						                "¡Felicidades! Adivinaste la palabra: " + palabra.toUpperCase(), //convertimos la palabra a mayuscula
+						                "¡Ganaste!", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+						        } else if (juego.isJuegoTerminado()) {
+						            javax.swing.JOptionPane.showMessageDialog(frame,
+						            		//Muestra una ventana indicando que perdiste.
+						                "¡Perdiste! La palabra era: " + juego.getPalabraSecreta().toUpperCase(),
+						                "Game Over", javax.swing.JOptionPane.ERROR_MESSAGE);
+						        }
+						        //---------
 						        SwingUtilities.invokeLater(() -> comp.transferFocus());
 						        palabraIngresada.setLength(0);
 						        contador5 = 4;

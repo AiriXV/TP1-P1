@@ -106,7 +106,7 @@ public class Central {
 		return this.intentosUsados + " de 6";
 	}
 	
-	//Metodo que verifica si la palabra esta dentro del diccionario
+	//Metodo que verifica si la palabra esta dentro del diccionario.
 	public boolean esPalabraValida(String intento) {
 	    String[] diccionario = { "arbol", "casas", "zorro", "piano", "llave", 
 	                             "libro", "mouse", "tecla", "gatos", "juego" };
