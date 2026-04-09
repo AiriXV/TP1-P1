@@ -455,87 +455,115 @@ public class MainForm {
 	}
 
 	private void recorrerFila(Component com) {
-		JPanel m = (JPanel) com;
-		for (Component comp : m.getComponents()) {
-			comp.addKeyListener(new KeyAdapter() {
-				public void keyTyped(KeyEvent e) {
+	    JPanel m = (JPanel) com;
+	    Component[] componentes = m.getComponents(); // Obtenemos los 5 cuadros de la fila
+	    
+	    for (int i = 0; i < componentes.length; i++) {
+	        final int indiceLetra = i; // Guardamos el índice (0 a 4)
+	        Component comp = componentes[i];
+	        
+	        comp.addKeyListener(new KeyAdapter() {
+	            @Override
+	            public void keyPressed(KeyEvent e) {
+	                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+	                    enviarPalabra();
+	                }
+	                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+	                    JTextField campo = (JTextField) comp;
+	                    if (campo.getText().isEmpty()) {
+	                        comp.transferFocusBackward();
+	                    } else {
+	                        campo.setText("");
+	                    }
+	                }
+	            }
 
-					if (((JTextField) comp).getText().length() > 0) {
-						e.consume(); // para detectar un solo char
-						return;
-					} else {
-						char letra = e.getKeyChar();
-						// limpia
-						e.consume();
-						mostrarUnicoCaracter(comp, letra);
-						palabraIngresada.append(letra);
+	            @Override
+	            public void keyTyped(KeyEvent e) {
+	                char letra = e.getKeyChar();
+	                JTextField campo = (JTextField) comp;
 
-						if (contador5 > 0) {
-							SwingUtilities.invokeLater(() -> comp.transferFocus()); // mueve el cursor al siguiente
-																					// campo
-							contador5--;
-						} else {
-							//Muestra un mensaje de error si la palabra es invalida, si no esta en el diccionario
-							String palabra = palabraIngresada.toString();
-						    if (!juego.esPalabraValida(palabra)) {
-						        // Limpia la fila
-						        for (JTextField campo : todasLasFilas[filaActual]) {
-						            campo.setText("");
-						            campo.setBackground(Color.WHITE);
-						        }
-						        palabraIngresada.setLength(0);
-						        contador5 = 4;
-						        SwingUtilities.invokeLater(() -> todasLasFilas[filaActual][0].requestFocus()); //Mueve el cursor al primer campo de la fila para que el usuario pueda ingresar nuevamente
-						        
-						        javax.swing.JOptionPane.showMessageDialog(frame,
-						            "Palabra no válida. Intentá con otra.", 
-						            "Error", javax.swing.JOptionPane.WARNING_MESSAGE); //Mensaje de error.
-						    } else {
-						        Boolean[] resultado = juego.recibirIntento(palabra);
-						        cambiarColorTecla(resultado);
-						        cambiarColorContenedor(resultado);
-						        
-						        //----Nos muestra un aviso que indica si perdiste o ganaste con los 6 intentos
-						        if (palabra.equalsIgnoreCase(juego.getPalabraSecreta())) {
-						        	
-						        	//Muestra una ventana con un mensaje
-						            javax.swing.JOptionPane.showMessageDialog(frame,
-						                "¡Felicidades! Adivinaste la palabra: " + palabra.toUpperCase(), //convertimos la palabra a mayuscula
-						                "¡Ganaste!", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-						        } else if (juego.isJuegoTerminado()) {
-						            javax.swing.JOptionPane.showMessageDialog(frame,
-						            		//Muestra una ventana indicando que perdiste.
-						                "¡Perdiste! La palabra era: " + juego.getPalabraSecreta().toUpperCase(),
-						                "Game Over", javax.swing.JOptionPane.ERROR_MESSAGE);
-						        }
-						        //---------
-						        SwingUtilities.invokeLater(() -> comp.transferFocus());
-						        palabraIngresada.setLength(0);
-						        contador5 = 4;
-						    }
-						}
-					}
-				}
-			});
-		}
+	                if (!Character.isLetter(letra) || !campo.getText().isEmpty()) {
+	                    e.consume();
+	                    return;
+	                }
+
+	                e.setKeyChar(Character.toUpperCase(letra));
+
+	                // SOLO movemos el foco si NO es la última letra (índice 4)
+	                if (indiceLetra < 4) {
+	                    SwingUtilities.invokeLater(() -> comp.transferFocus());
+	                }
+	            }
+	        });
+	    }
+	}
+	
+	private void enviarPalabra() {
+	    if (juego.isJuegoTerminado() || filaActual > 5) return;
+
+	    StringBuilder sb = new StringBuilder();
+	    JTextField[] filaActualArray = todasLasFilas[filaActual];
+	    
+	    for (JTextField campo : filaActualArray) {
+	        sb.append(campo.getText());
+	    }
+
+	    String palabra = sb.toString();
+
+	    if (palabra.length() < 5) {
+	        javax.swing.JOptionPane.showMessageDialog(frame, "La palabra debe tener 5 letras.");
+	        return;
+	    }
+
+	    Boolean[] resultado = juego.recibirIntento(palabra);
+	    cambiarColorTecla(resultado, palabra); 
+	    cambiarColorContenedor(resultado);     
+
+	    // Verificamos victoria o derrota
+	    if (juego.isJuegoTerminado()) {
+	        String mensaje;
+	        if (palabra.equalsIgnoreCase(juego.getPalabraSecreta())) {
+	            mensaje = "¡GANASTE! " + palabra + " era la palabra.";
+	        } else {
+	            mensaje = "PERDISTE. La palabra era: " + juego.getPalabraSecreta();
+	        }
+	        javax.swing.JOptionPane.showMessageDialog(frame, mensaje);
+	    } else {
+	        solicitarFocoNuevaFila();
+	    }
 	}
 
-	protected void cambiarColorTecla(Boolean[] resultadoFila) {
-		for (int i = 0; i < 5; i++) {
-			String letra = String.valueOf(palabraIngresada.charAt(i));
-			if (resultadoFila[i] != null) {
-				if (resultadoFila[i] == true) {
-					teclado.get(letra).setBackground(Color.green);
-				}
-				else {
-					teclado.get(letra).setBackground(Color.decode("#C9B458"));
-				}
-			} else {
-				teclado.get(letra).setBackground(Color.gray);
-			}
-		}
+	private void solicitarFocoNuevaFila() {
+	    if (filaActual < 6) {
+	        todasLasFilas[filaActual][0].requestFocus();
+	    }
 	}
+	
 
+	protected void cambiarColorTecla(Boolean[] resultadoFila, String palabraEnviada) {
+	    palabraEnviada = palabraEnviada.toLowerCase(); 
+
+	    for (int i = 0; i < 5; i++) {
+	        String letra = String.valueOf(palabraEnviada.charAt(i));
+	        JButton botonTecla = teclado.get(letra);
+
+	        if (botonTecla != null) {
+	            if (resultadoFila[i] != null) {
+	                if (resultadoFila[i] == true) {
+	                    botonTecla.setBackground(Color.green);
+	                } else {
+	                    botonTecla.setBackground(Color.yellow);
+	                }
+	            } else {
+	            	if (botonTecla.getBackground() != Color.green && 
+	                        botonTecla.getBackground() != Color.yellow) {
+	                        botonTecla.setBackground(Color.gray);
+	                    }
+	            }
+	        }
+	    }
+	}
 	protected void cambiarColorContenedor(Boolean[] resultadoFila) {
 	    JTextField[] filaActualArray = todasLasFilas[filaActual];
 
