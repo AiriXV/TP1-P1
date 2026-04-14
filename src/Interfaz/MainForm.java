@@ -5,6 +5,10 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -77,6 +81,30 @@ public class MainForm {
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		
+		// 1. Creamos la barra, el menú y los ítems
+		JMenuBar menuBar = new JMenuBar();
+		JMenu menuArchivo = new JMenu("Opciones");
+		JMenuItem itemNuevo = new JMenuItem("Nuevo Juego");
+		JMenuItem itemSalir = new JMenuItem("Salir");
+
+		// 2. Agregamos acciones
+		itemNuevo.addActionListener(e -> reiniciarJuego()); // Método que crearemos abajo (para la lógica) 
+		itemSalir.addActionListener(e -> System.exit(0));
+
+		// 3. Ensamblamos todo
+		menuArchivo.add(itemNuevo);
+		menuArchivo.addSeparator(); // Una línea divisoria
+		menuArchivo.add(itemSalir);
+		menuBar.add(menuArchivo);
+
+		// 4. Se lo ponemos al frame
+		frame.setJMenuBar(menuBar);
+		
+		
+		
+		
+		
 
 		JLabel titulo = new JLabel("W-UNGS-dle");
 		titulo.setFont(new Font("Arial Rounded MT Bold", titulo.getFont().getStyle(), 30));
@@ -136,6 +164,32 @@ public class MainForm {
 		}
 
 		recorrerFila();
+	}
+
+	private void reiniciarJuego() {
+	    // Reiniciar la Lógica (Crea una nueva partida con palabra nueva)
+	    this.juego = new Central(); 
+	    this.filaActual = 0;
+	    
+	    // Limpiar la Interfaz Visual
+	    for (JTextField[] fila : todasLasFilas) {
+	        for (JTextField campo : fila) {
+	            campo.setText("");
+	            campo.setBackground(Color.WHITE);
+	            campo.setEditable(true);
+	        }
+	    }
+	    
+	    // Resetear el teclado 
+	    for (JButton boton : teclado.values()) {
+	        boton.setBackground(Color.PINK); 
+	    }
+	    
+	    // Actualizar etiquetas y dar foco al inicio
+	    lblNewLabel.setText("Palabra a adivinar: " + juego.obtenerPalabraSecreta());
+	    solicitarFocoNuevaFila();
+	    
+	    javax.swing.JOptionPane.showMessageDialog(frame, "¡Nueva partida, mucha suerte!");
 	}
 
 	private void recorrerFila() {
