@@ -64,7 +64,8 @@ public class MainForm {
 	private JPanel panel_2;
 	private JPanel panel_3;
 	private JPanel panel_4;
-	private int contador5 = 4;
+	private int cantIntentos,cantLetras;
+	
 
 	private StringBuilder palabraIngresada;
 
@@ -72,12 +73,8 @@ public class MainForm {
 	
 	private int filaActual = 0;
 	private JTextField[][] todasLasFilas;
-	private JTextField[] fila1 = new JTextField[5];
-	private JTextField[] fila2 = new JTextField[5];
-	private JTextField[] fila3 = new JTextField[5];
-	private JTextField[] fila4 = new JTextField[5];
-	private JTextField[] fila5 = new JTextField[5];
-	private JTextField[] fila6 = new JTextField[5];
+	
+	
 
 	/**
 	 * Launch the application.
@@ -100,8 +97,12 @@ public class MainForm {
 	 * Create the application.
 	 */
 	public MainForm() {
-		initialize();
+		
 		palabraIngresada = new StringBuilder();
+		cantIntentos=juego.obteterCantIntentos();
+		cantLetras=juego.obtenerCantLetras();
+		todasLasFilas=new JTextField[cantIntentos][cantLetras];
+		initialize();
 	}
 
 	/**
@@ -129,288 +130,35 @@ public class MainForm {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-
+		
+		
 		panel_0 = new JPanel();
 		panel_0.setBackground(new Color(255, 128, 192));
-		panel_0.setBounds(287, 178, 385, 405);
+		panel_0.setBounds(287, 178, 485, 405);
 		frame.getContentPane().add(panel_0);
-		panel_0.setLayout(new GridLayout(6, 5, 5, 5));
-
-		btnNewButton.setBounds(715, 188, 137, 41);
-		frame.getContentPane().add(btnNewButton);
-
-		panel_1 = new JPanel();
-		panel_0.add(panel_1);
-		panel_1.setLayout(new GridLayout(0, 5, 5, 5));
-		panel_1.setBackground(new Color(244, 162, 205));
-
-		panel_2 = new JPanel();
-		panel_2.setBorder(new EmptyBorder(0, 0, 0, 0));
-		panel_2.setBounds(287, 252, 385, 55);
-//		frame.getContentPane().add(panel_2);
-		panel_0.add(panel_2);
-		panel_2.setLayout(new GridLayout(0, 5, 5, 5));
-		panel_2.setBackground(new Color(244, 162, 205));
-
-		// --------- FILA 1 ----------
-
-		txt1 = new JTextField();
-		fila1[0] = txt1;
-		txt1.setHorizontalAlignment(SwingConstants.CENTER);
-		txt1.setBounds(287, 181, 69, 55);
-		txt1.setColumns(10);
-		panel_1.add(txt1);
-
-		txt2 = new JTextField();
-		fila1[1] = txt2;
-		txt2.setHorizontalAlignment(SwingConstants.CENTER);
-		txt2.setColumns(10);
-		txt2.setBounds(366, 181, 69, 55);
-		panel_1.add(txt2);
-
-		txt3 = new JTextField();
-		fila1[2] = txt3;
-		txt3.setHorizontalAlignment(SwingConstants.CENTER);
-		txt3.setColumns(10);
-		txt3.setBounds(445, 181, 69, 55);
-		panel_1.add(txt3);
-
-		txt4 = new JTextField();
-		fila1[3] = txt4;
-		txt4.setHorizontalAlignment(SwingConstants.CENTER);
-		txt4.setColumns(10);
-		txt4.setBounds(524, 181, 69, 55);
-		panel_1.add(txt4);
-
-		txt5 = new JTextField();
-		fila1[4] = txt5;
-		txt5.setHorizontalAlignment(SwingConstants.CENTER);
-		txt5.setColumns(10);
-		txt5.setBounds(603, 181, 69, 55);
-		panel_1.add(txt5);
-
-		// -------------- FILA 2 -----------------
-		txt6 = new JTextField();
-		fila2[0] = txt6;
-		txt6.setHorizontalAlignment(SwingConstants.CENTER);
-		txt6.setColumns(10);
-		txt6.setBounds(287, 252, 69, 55);
-		panel_2.add(txt6);
-
-		txt7 = new JTextField();
-		fila2[1] = txt7;
-		txt7.setHorizontalAlignment(SwingConstants.CENTER);
-		txt7.setColumns(10);
-		txt7.setBounds(366, 252, 69, 55);
-		panel_2.add(txt7);
-
-		txt8 = new JTextField();
-		fila2[2] = txt8;
-		txt8.setHorizontalAlignment(SwingConstants.CENTER);
-		txt8.setColumns(10);
-		txt8.setBounds(445, 252, 69, 55);
-		panel_2.add(txt8);
-
-		txt9 = new JTextField();
-		fila2[3] = txt9;
-		txt9.setHorizontalAlignment(SwingConstants.CENTER);
-		txt9.setColumns(10);
-		txt9.setBounds(524, 252, 69, 55);
-		panel_2.add(txt9);
-
-		txt10 = new JTextField();
-		fila2[4] = txt10;
-		txt10.setHorizontalAlignment(SwingConstants.CENTER);
-		txt10.setColumns(10);
-		txt10.setBounds(603, 252, 69, 55);
-		panel_2.add(txt10);
-
-		// -------- FILA 3 --------------
-
-		panel_3 = new JPanel();
-		panel_3.setBorder(null);
-		panel_3.setForeground(new Color(0, 0, 0));
-		panel_3.setBounds(287, 252, 385, 55);
-		panel_0.add(panel_3);
-		panel_3.setLayout(new GridLayout(0, 5, 5, 5));
-
-		txt11 = new JTextField();
-		fila3[0] = txt11;
-		txt11.setHorizontalAlignment(SwingConstants.CENTER);
-		txt11.setColumns(10);
-		txt11.setBounds(287, 318, 69, 55);
-		panel_3.add(txt11);
-
-		txt12 = new JTextField();
-		fila3[1] = txt12;
-		txt12.setHorizontalAlignment(SwingConstants.CENTER);
-		txt12.setColumns(10);
-		txt12.setBounds(366, 318, 69, 55);
-		panel_3.add(txt12);
-
-		txt13 = new JTextField();
-		fila3[2] = txt13;
-		txt13.setHorizontalAlignment(SwingConstants.CENTER);
-		txt13.setColumns(10);
-		txt13.setBounds(445, 318, 69, 55);
-		panel_3.add(txt13);
-
-		txt14 = new JTextField();
-		fila3[3] = txt14;
-		txt14.setHorizontalAlignment(SwingConstants.CENTER);
-		txt14.setColumns(10);
-		txt14.setBounds(524, 318, 69, 55);
-		panel_3.add(txt14);
-
-		txt15 = new JTextField();
-		fila3[4] = txt15;
-		txt15.setHorizontalAlignment(SwingConstants.CENTER);
-		txt15.setColumns(10);
-		txt15.setBounds(603, 318, 69, 55);
-		panel_3.add(txt15);
-
-		// -------- FILA 4 --------------
-
-		panel_4 = new JPanel();
-		panel_4.setForeground(Color.BLACK);
-		panel_4.setBorder(null);
-		panel_0.add(panel_4);
-		panel_4.setLayout(new GridLayout(0, 5, 5, 5));
-
-		txt16 = new JTextField();
-		fila4[0] = txt16;
-		txt16.setHorizontalAlignment(SwingConstants.CENTER);
-		txt16.setColumns(10);
-		panel_4.add(txt16);
-
-		txt17 = new JTextField();
-		fila4[1] = txt17;
-		txt17.setHorizontalAlignment(SwingConstants.CENTER);
-		txt17.setColumns(10);
-		panel_4.add(txt17);
-
-		txt18 = new JTextField();
-		fila4[2] = txt18;
-		txt18.setHorizontalAlignment(SwingConstants.CENTER);
-		txt18.setColumns(10);
-		panel_4.add(txt18);
-
-		txt19 = new JTextField();
-		fila4[3] = txt19;
-		txt19.setHorizontalAlignment(SwingConstants.CENTER);
-		txt19.setColumns(10);
-		panel_4.add(txt19);
-
-		txt20 = new JTextField();
-		fila4[4] = txt20;
-		txt20.setHorizontalAlignment(SwingConstants.CENTER);
-		txt20.setColumns(10);
-		panel_4.add(txt20);
-
-		// -------- FILA 5 --------------
-
-		JPanel panel_5 = new JPanel();
-		panel_5.setForeground(Color.BLACK);
-		panel_5.setBorder(null);
-		panel_0.add(panel_5);
-		panel_5.setLayout(new GridLayout(0, 5, 5, 5));
-
-		txt21 = new JTextField();
-		fila5[0] = txt21;
-		txt21.setHorizontalAlignment(SwingConstants.CENTER);
-		txt21.setColumns(10);
-		panel_5.add(txt21);
-
-		txt22 = new JTextField();
-		fila5[1] = txt22;
-		txt22.setHorizontalAlignment(SwingConstants.CENTER);
-		txt22.setColumns(10);
-		panel_5.add(txt22);
-
-		txt23 = new JTextField();
-		fila5[2] = txt23;
-		txt23.setHorizontalAlignment(SwingConstants.CENTER);
-		txt23.setColumns(10);
-		panel_5.add(txt23);
-
-		txt24 = new JTextField();
-		fila5[3] = txt24;
-		txt24.setHorizontalAlignment(SwingConstants.CENTER);
-		txt24.setColumns(10);
-		panel_5.add(txt24);
-
-		txt25 = new JTextField();
-		fila5[4] = txt25;
-		txt25.setHorizontalAlignment(SwingConstants.CENTER);
-		txt25.setColumns(10);
-		panel_5.add(txt25);
-
-		// -------- FILA 6 --------------
-
-		JPanel panel_6 = new JPanel();
-		panel_6.setForeground(Color.BLACK);
-		panel_6.setBorder(null);
-		panel_0.add(panel_6);
-		panel_6.setLayout(new GridLayout(0, 5, 5, 5));
-
-		txt26 = new JTextField();
-		fila6[0] = txt26;
-		txt26.setHorizontalAlignment(SwingConstants.CENTER);
-		txt26.setColumns(10);
-		panel_6.add(txt26);
-
-		txt27 = new JTextField();
-		fila6[1] = txt27;
-		txt27.setHorizontalAlignment(SwingConstants.CENTER);
-		txt27.setColumns(10);
-		panel_6.add(txt27);
-
-		txt28 = new JTextField();
-		fila6[2] = txt28;
-		txt28.setHorizontalAlignment(SwingConstants.CENTER);
-		txt28.setColumns(10);
-		panel_6.add(txt28);
-
-		txt29 = new JTextField();
-		fila6[3] = txt29;
-		txt29.setHorizontalAlignment(SwingConstants.CENTER);
-		txt29.setColumns(10);
-		panel_6.add(txt29);
-
-		txt30 = new JTextField();
-		fila6[4] = txt30;
-		txt30.setHorizontalAlignment(SwingConstants.CENTER);
-		txt30.setColumns(10);
-		panel_6.add(txt30);
-
-		todasLasFilas = new JTextField[][] { fila1, fila2, fila3, fila4, fila5, fila6 };
-		for (Component com : panel_0.getComponents()) {
-			recorrerFila(com);
+		panel_0.setLayout(new GridLayout(cantIntentos, cantLetras, 5, 5));
+	
+		for(int f =0;f<cantIntentos;f++) {
+			for(int c =0;c<cantLetras;c++) {
+			 
+			    txt1 = new JTextField();
+				txt1.setHorizontalAlignment(SwingConstants.CENTER);
+//				txt1.setBounds(287, 181, 59, 45);
+				txt1.setColumns(10);
+				todasLasFilas[f][c]=txt1;
+				panel_0.add(txt1);
+				
+				
 		}
+	}
+	
+
 
 		// ------------ BOTONES DE COMPROBAR ----------------
 		
-		JButton btnComprobar1 = new JButton("Comprobar");
-		btnComprobar1.setBounds(715, 259, 137, 41);
-		frame.getContentPane().add(btnComprobar1);
+		
 
-		JButton btnComprobar2 = new JButton("Comprobar");
-		btnComprobar2.setBounds(715, 325, 137, 41);
-		frame.getContentPane().add(btnComprobar2);
-
-		JButton btnComprobar3 = new JButton("Comprobar");
-		btnComprobar3.setBounds(715, 391, 137, 41);
-		frame.getContentPane().add(btnComprobar3);
-
-		JButton btnComprobar4 = new JButton("Comprobar");
-		btnComprobar4.setBounds(715, 457, 137, 41);
-		frame.getContentPane().add(btnComprobar4);
-
-		JButton btnComprobar5 = new JButton("Comprobar");
-		btnComprobar5.setBounds(715, 523, 137, 41);
-		frame.getContentPane().add(btnComprobar5);
-
-		lblNewLabel = new JLabel("Palabra a adivinar:" + juego.getPalabraSecreta());
+		lblNewLabel = new JLabel("Palabra a adivinar:" + juego.obtenerPalabraSecreta());
 		lblNewLabel.setBounds(288, 108, 226, 14);
 		frame.getContentPane().add(lblNewLabel);
 		
@@ -420,7 +168,7 @@ public class MainForm {
 		tecladoPanel.setBounds(268, 591, 510, 139);
 		frame.getContentPane().add(tecladoPanel);
 		
-		JLabel lblNewLabel_1 = new JLabel("Intentos: " + juego.getIntentosUsados());
+		JLabel lblNewLabel_1 = new JLabel("Intentos: " + juego.obtenerIntentosUsados());
 		lblNewLabel_1.setBounds(287, 133, 183, 14);
 		frame.getContentPane().add(lblNewLabel_1);
 
@@ -443,6 +191,9 @@ public class MainForm {
 //				}
 //			});
 		}
+		
+		recorrerFila();
+		
 	}
 
 	private void mostrarUnicoCaracter(Component comp, char a) {
@@ -454,45 +205,44 @@ public class MainForm {
 		campo.setText(String.valueOf(Character.toUpperCase(a)));
 	}
 
-	private void recorrerFila(Component com) {
-	    JPanel m = (JPanel) com;
-	    Component[] componentes = m.getComponents(); // Obtenemos los 5 cuadros de la fila
+	private void recorrerFila() {
+	
 	    
-	    for (int i = 0; i < componentes.length; i++) {
+	    for (int i = 0; i < cantLetras; i++) {
 	        final int indiceLetra = i; // Guardamos el índice (0 a 4)
-	        Component comp = componentes[i];
+	        JTextField contenedor = todasLasFilas[filaActual][i];
 	        
-	        comp.addKeyListener(new KeyAdapter() {
+	        contenedor.addKeyListener(new KeyAdapter() {
 	            @Override
 	            public void keyPressed(KeyEvent e) {
 	                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 	                    enviarPalabra();
 	                }
 	                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-	                    JTextField campo = (JTextField) comp;
-	                    if (campo.getText().isEmpty()) {
-	                        comp.transferFocusBackward();
+	                   
+	                    if (contenedor.getText().isEmpty()) {
+	                        contenedor.transferFocusBackward();
 	                    } else {
-	                        campo.setText("");
+	                        contenedor.setText("");
 	                    }
 	                }
 	            }
 
 	            @Override
 	            public void keyTyped(KeyEvent e) {
-	                char letra = e.getKeyChar();
-	                JTextField campo = (JTextField) comp;
+	                char letraaa = e.getKeyChar();
+	                JTextField campo = (JTextField) contenedor;
 
-	                if (!Character.isLetter(letra) || !campo.getText().isEmpty()) {
+	                if (!Character.isLetter(letraaa) || !campo.getText().isEmpty()) {
 	                    e.consume();
 	                    return;
 	                }
 
-	                e.setKeyChar(Character.toUpperCase(letra));
+	                e.setKeyChar(Character.toUpperCase(letraaa));
 
 	                // SOLO movemos el foco si NO es la última letra (índice 4)
-	                if (indiceLetra < 4) {
-	                    SwingUtilities.invokeLater(() -> comp.transferFocus());
+	                if (indiceLetra < cantLetras-1) {
+	                    SwingUtilities.invokeLater(() -> campo.transferFocus());
 	                }
 	            }
 	        });
@@ -500,7 +250,7 @@ public class MainForm {
 	}
 	
 	private void enviarPalabra() {
-	    if (juego.isJuegoTerminado() || filaActual > 5) return;
+	    if (juego.termino() || filaActual > cantIntentos) return;
 
 	    StringBuilder sb = new StringBuilder();
 	    JTextField[] filaActualArray = todasLasFilas[filaActual];
@@ -511,8 +261,8 @@ public class MainForm {
 
 	    String palabra = sb.toString();
 
-	    if (palabra.length() < 5) {
-	        javax.swing.JOptionPane.showMessageDialog(frame, "La palabra debe tener 5 letras.");
+	    if (palabra.length() < cantLetras) {
+	        javax.swing.JOptionPane.showMessageDialog(frame, "La palabra debe tener "+ cantLetras+" letras.");
 	        return;
 	    }
 
@@ -521,12 +271,12 @@ public class MainForm {
 	    cambiarColorContenedor(resultado);     
 
 	    // Verificamos victoria o derrota
-	    if (juego.isJuegoTerminado()) {
+	    if (juego.termino()) {
 	        String mensaje;
-	        if (palabra.equalsIgnoreCase(juego.getPalabraSecreta())) {
+	        if (palabra.equalsIgnoreCase(juego.obtenerPalabraSecreta())) {
 	            mensaje = "¡GANASTE! " + palabra + " era la palabra.";
 	        } else {
-	            mensaje = "PERDISTE. La palabra era: " + juego.getPalabraSecreta();
+	            mensaje = "PERDISTE. La palabra era: " + juego.obtenerPalabraSecreta();
 	        }
 	        javax.swing.JOptionPane.showMessageDialog(frame, mensaje);
 	    } else {
@@ -535,7 +285,7 @@ public class MainForm {
 	}
 
 	private void solicitarFocoNuevaFila() {
-	    if (filaActual < 6) {
+	    if (filaActual < cantIntentos) {
 	        todasLasFilas[filaActual][0].requestFocus();
 	    }
 	}
@@ -580,5 +330,6 @@ public class MainForm {
 	    }
 
 	    filaActual++;
+	    recorrerFila();
 	}
 }

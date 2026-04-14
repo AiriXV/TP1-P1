@@ -1,15 +1,24 @@
 package logica;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.io.IOException;
+
 
 public class Central {
 	private String palabraSecreta;
 	private int intentosUsados;
 	private boolean juegoTerminado;
+	private int cantIntentos,cantLetras;
 
 	// Constructor
 	public Central() {
 		this.palabraSecreta = seleccionarPalabraAleatoria();
 		this.intentosUsados = 0;
 		this.juegoTerminado = false;
+		this.cantIntentos=6;
+		this.cantLetras=5;
+		
 	}
 
 	// Método para recibir un String del usuario y devolver el status de cada letra
@@ -19,6 +28,8 @@ public class Central {
 //        }
 
 		intento = intento.toUpperCase();
+		
+		if(validarPalabra(intento)) {
 		String secreta = palabraSecreta.toUpperCase();
 
 		intentosUsados++;
@@ -61,9 +72,25 @@ public class Central {
 
 		logicaVictoria(intento);
 
-		// Unimos el array de resultados en un solo String para devolver
-		return resultadoColores;
+		
+		return resultadoColores;}
+		//que hacer si es invalida cambiar///////////////////////////////////////////////////////////////////////
+		Boolean[] resultadoColores = new Boolean[5];
+		
+		return  resultadoColores;
 
+	}
+
+	private boolean validarPalabra(String intento) {
+		try {
+		 List<String> todasLasPalabras = Files.readAllLines(Paths.get("diccionario.txt"));
+		 return todasLasPalabras.contains(intento);
+		}catch (IOException e) {
+	        // Si el archivo no existe o no se puede leer, muestra el error en consola
+	        System.out.println("Error al leer el archivo de palabras: " + e.getMessage());
+	        return false; 
+	    }
+		
 	}
 
 	private String logicaVictoria(String intento) {
@@ -83,38 +110,52 @@ public class Central {
 
 	// Método para seleccionar una palabra aleatoria de una lista predefinida
 	private String seleccionarPalabraAleatoria() {
-		String[] diccionario = { "arbol", "casas", "zorro", "piano", "llave", "libro", "mouse", "tecla", "gatos",
-				"juego" };
-
+		//-----Listado de palabras solo por si queremos hacer una revisión sin usar el txt
+		//String[] diccionario = { "arbol", "casas", "zorro", "piano", "llave", "libro", "mouse", "tecla", "gatos",
+		//		"juego" };
 		// Generamos un índice al azar entre 0 y el largo de la lista
-		int indiceAleatorio = (int) (Math.random() * diccionario.length);
+		// int indiceAleatorio = (int) (Math.random() * diccionario.length);
+		//return diccionario[indiceAleatorio];
+		
+		//ahora si usando el txt
+		try {
+	        // Busca el archivo y guarda todas las líneas en una lista
+	        List<String> todasLasPalabras = Files.readAllLines(Paths.get("diccionario.txt"));
 
-		return diccionario[indiceAleatorio];
+	        int indiceAleatorio = (int) (Math.random() * todasLasPalabras.size());
+	        
+	        // retorna la palabra elegida, quitando espacios y pasando a mayúsculas
+	        return todasLasPalabras.get(indiceAleatorio).trim().toUpperCase();
+
+	    } catch (IOException e) {
+	        // Si el archivo no existe o no se puede leer, muestra el error en consola
+	        System.out.println("Error al leer el archivo de palabras: " + e.getMessage());
+	        return "JUEGO"; // Palabra de respaldo por defecto para que el programa no se rompa
+	    }
+		
 	}
 
 	// Getter para saber si el juego terminó (informa a probarJuego)
-	public boolean isJuegoTerminado() {
+	public boolean termino() {
 		return this.juegoTerminado;
 	}
 	
-	public String getPalabraSecreta() {
+	public String obtenerPalabraSecreta() {
 		return this.palabraSecreta;
 	}
 
-	public String getIntentosUsados() {
+	public String obtenerIntentosUsados() {
 
 		return this.intentosUsados + " de 6";
 	}
-	
-	//Metodo que verifica si la palabra esta dentro del diccionario.
-	public boolean esPalabraValida(String intento) {
-	    String[] diccionario = { "arbol", "casas", "zorro", "piano", "llave", 
-	                             "libro", "mouse", "tecla", "gatos", "juego" };
-	    for (String palabra : diccionario) {
-	        if (palabra.equalsIgnoreCase(intento)) {
-	            return true;
-	        }
-	    }
-	    return false;
+
+	public int obteterCantIntentos() {
+		// TODO Auto-generated method stub
+		return cantIntentos;
+	}
+
+	public int obtenerCantLetras() {
+		
+		return cantLetras;
 	}
 }
