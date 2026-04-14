@@ -11,7 +11,8 @@ public class Central {
 	private boolean juegoTerminado;
 	private int cantIntentos, cantLetras;
 
-	public Central() {
+	public Central(String nivel, String idioma) {
+		
 		this.cantIntentos = 6;
 		this.cantLetras = 5;
 		this.palabraSecreta = seleccionarPalabraAleatoria();

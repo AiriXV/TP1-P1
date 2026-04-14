@@ -29,7 +29,7 @@ import javax.swing.SwingConstants;
 public class MainForm {
 
 	private JFrame frame;
-	private Central juego = new Central();
+	private Central juego;
 	private JTextField txt1;
 	private JLabel lblNewLabel;
 	private JLabel lblIntentos;
@@ -40,27 +40,34 @@ public class MainForm {
 
 	private int filaActual = 0;
 	private JTextField[][] todasLasFilas;
+	private String nivel;
+	private String idioma;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainForm window = new MainForm();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					MainForm window = new MainForm();
+//					window.frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the application.
+	 * @param idioma 
+	 * @param nivel 
 	 */
-	public MainForm() {
+	public MainForm(String nivel, String idioma) {
+		this.idioma=idioma;
+		this.nivel=nivel;
+		juego= new Central(nivel,idioma);
 		cantIntentos = juego.obteterCantIntentos();
 		cantLetras = juego.obtenerCantLetras();
 		todasLasFilas = new JTextField[cantIntentos][cantLetras];
@@ -168,7 +175,7 @@ public class MainForm {
 
 	private void reiniciarJuego() {
 	    // Reiniciar la Lógica (Crea una nueva partida con palabra nueva)
-	    this.juego = new Central(); 
+	    this.juego = new Central(this.nivel,this.idioma); 
 	    this.filaActual = 0;
 	    
 	    // Limpiar la Interfaz Visual
@@ -330,5 +337,10 @@ public class MainForm {
 		if (filaActual < cantIntentos) {
 			recorrerFila();
 		}
+	}
+
+	public void hacerVisible() {
+		frame.setVisible(true);
+		
 	}
 }
